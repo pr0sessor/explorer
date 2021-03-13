@@ -25,13 +25,13 @@ block contents
         td {{ hashrate }}
         td {{ peerCount }}
 
-    //- h4 Latest Block: 
+    //- h4 Latest Block:
       a(v-bind:href="'/block/' + blockNumber") {{ blockNumber }}
 
     //- ========================
     //- Recent Blocks
     //- ========================
-    h1 
+    h1
       i.fa.fa-cubes
       span.ml-1 Recent Blocks
 
@@ -46,22 +46,22 @@ block contents
           th Timestamp
       tbody
         tr(v-if="blocks.length === 0")
-          td(colspan="6") 
+          td(colspan="6")
              div(style="text-align:center")
-              i.fas.fa-2x.fa-spinner.fa-pulse 
+              i.fas.fa-2x.fa-spinner.fa-pulse
         tr(v-for="block in blocks", v-if="blocks.length > 0")
-          td       
+          td
             a(v-bind:href="'/block/' + block.number.toString(10)") {{ block.number.toString(10) }}
           td {{ block.transactions.length }}
           td {{ block.size }} bytes
-          td {{ block.gasLimit }} 
-          td {{ block.gasUsed }} 
+          td {{ block.gasLimit }}
+          td {{ block.gasUsed }}
           td {{ new Date(block.timestamp * 1000).toGMTString() }}
 
     //- ========================
     //- Recent Transactions
     //- ========================
-    h1 
+    h1
       i.fas.fa-exchange-alt
       span.ml-1 Recent Transactions
 
@@ -71,25 +71,25 @@ block contents
           th TxHash
           th Block
           th Value
-          th From 
+          th From
           th To
           th Gas Used
           th Gas Price
           th Tx Fee
       tbody
         tr(v-if="txs.length === 0")
-          td(colspan="8") 
+          td(colspan="8")
              div(style="text-align:center")
-              i.fas.fa-2x.fa-spinner.fa-pulse 
+              i.fas.fa-2x.fa-spinner.fa-pulse
         tr(v-for="tx in txs", v-if="txs.length > 0")
-          td       
+          td
             a.d-inline-block.text-truncate(v-bind:href="'/tx/' + tx.hash", style="max-width:200px") {{ tx.hash }}
-          td 
+          td
             a(v-bind:href="'/block/' + tx.blockNumber.toString(10)") {{ tx.blockNumber.toString(10) }}
           td {{ web3.fromWei(tx.value, 'ether').toString(10) + ' ETH' }}
           td
             a.d-inline-block.text-truncate(v-bind:href="'/address/' + tx.from", style="max-width:150px") {{ tx.from }}
-          td 
+          td
             span(v-if="tx.to === '0x0'") {{ tx.to }}
             a.d-inline-block.text-truncate(v-if="tx.to !== '0x0'", v-bind:href="'/address/' + tx.to", style="max-width:150px") {{ tx.to }}
           td {{ tx.gas.toString(10) }}
@@ -100,7 +100,7 @@ block contents
 
     var app = new Vue({
       el: '#app',
-      data: { 
+      data: {
         api: null,
         node: null,
         network: null,
@@ -152,15 +152,6 @@ block contents
       });
     }
 
-    function getBlockNumber() {
-      return new Promise((res, rej) => {
-        web3.eth.getBlockNumber((error, result) => {
-          if(error) rej(error);
-          else res(result);
-        });
-      });
-    }
-
     function getGasPrice(hashStringOrBlockNumber) {
       return new Promise((res, rej) => {
         web3.eth.getGasPrice((error, result) => {
@@ -196,7 +187,7 @@ block contents
       }
       return blocks;
     }
-    
+
     async function getRecentTxs(txhashs, maxCnt) {
       var txs = [];
       for (var i=0, l=txhashs.length, s=(maxCnt || 20)-1; i < s && i < l; i++) {
@@ -219,9 +210,6 @@ block contents
       getPeerCount().then(r =>  self.peerCount = r);
       //- getGasPrice().then(r =>  self.gasPrice = r.toString(10) + ' (' +  web3.fromWei(r, 'ether').toString(10) + ' ETH)');
       getGasPrice().then(r =>  self.gasPrice = r.toString(10) + ' (' +  web3.fromWei(r, 'gwei').toString(10) + ' Gwei)');
-
-      var blockNumber = await getBlockNumber();
-      self.blockNumber = blockNumber;
 
       self.blocks = await getRecentBlocks(blockNumber, 10, true);
       //- console.log(self.blocks);

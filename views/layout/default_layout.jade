@@ -4,11 +4,11 @@ html(lang="en")
     title=title
     meta(charset="utf-8")
     meta(name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no")
-    
+
     link(rel='stylesheet', href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css", integrity="sha384-WskhaSGFgHYWDcbwN70/dfYBj47jz9qbsMId/iRN3ewGhXQFZCSftd1LZCfmhktB", crossorigin="anonymous")
     link(rel='stylesheet', href="https://use.fontawesome.com/releases/v5.0.13/css/all.css", integrity="sha384-DNOHZ68U8hZfKXOrtjWvjxusGo9WQnrNx2sqG0tfsghAvtVlRW3tvkXWZh58N9jp", crossorigin="anonymous")
     link(rel='stylesheet', href='/stylesheets/style.css')
-    
+
     script(src="https://code.jquery.com/jquery-3.3.1.min.js", integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=", crossorigin="anonymous")
     script(src="https://cdn.jsdelivr.net/gh/ethereum/web3.js@0.20.6/dist/web3.min.js")
     script(src="https://cdn.jsdelivr.net/npm/vue")
@@ -17,11 +17,11 @@ html(lang="en")
       var web3;
       web3 = new Web3(new Web3.providers.HttpProvider("#{env.ETHEREUM_RPC_URL}"));
 
-      
+
   body
     nav.navbar.navbar-expand-md.navbar-dark.bg-dark.fixed-top
       a.navbar-brand.text-uppercase(href="/") Blockchain Explorer
-      button.navbar-toggler(type="button", data-toggle="collapse", data-target="#navbarsDefault", aria-controls="navbarsDefault", aria-expanded="false", aria-label="Toggle navigation") 
+      button.navbar-toggler(type="button", data-toggle="collapse", data-target="#navbarsDefault", aria-controls="navbarsDefault", aria-expanded="false", aria-label="Toggle navigation")
         span.navbar-toggler-icon
 
       div.collapse.navbar-collapse#navbarsDefault
@@ -49,6 +49,18 @@ html(lang="en")
         }
       });
 
+      function getBlockNumber() {
+        return new Promise((res, rej) => {
+          web3.eth.getBlockNumber((error, result) => {
+            if(error) rej(error);
+            else res(result);
+          });
+        });
+      }
+
+      var blockNumber = await getBlockNumber();
+      self.blockNumber = blockNumber;
+
       // search form
       $('#searchForm').submit(function(evt) {
         evt.preventDefault();
@@ -70,6 +82,6 @@ html(lang="en")
           location.href = '/block/' + search;
         } else {
           console.log('what?');
-        }      
-        
+        }
+
       });
