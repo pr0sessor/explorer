@@ -7,7 +7,7 @@ const https = require('https')
 const fs = require('fs')
 const path = require('path')
 
-const ssl = false
+const ssl = true
 
 const port = normalizePort(process.env.PORT || 80)
 app.set('port', port)
