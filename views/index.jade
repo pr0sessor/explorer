@@ -152,6 +152,15 @@ block contents
       });
     }
 
+    function getBlockNumber() {
+      return new Promise((res, rej) => {
+        web3.eth.getBlockNumber((error, result) => {
+          if(error) rej(error);
+          else res(result);
+        });
+      });
+    }
+
     function getGasPrice(hashStringOrBlockNumber) {
       return new Promise((res, rej) => {
         web3.eth.getGasPrice((error, result) => {
@@ -210,6 +219,9 @@ block contents
       getPeerCount().then(r =>  self.peerCount = r);
       //- getGasPrice().then(r =>  self.gasPrice = r.toString(10) + ' (' +  web3.fromWei(r, 'ether').toString(10) + ' ETH)');
       getGasPrice().then(r =>  self.gasPrice = r.toString(10) + ' (' +  web3.fromWei(r, 'gwei').toString(10) + ' Gwei)');
+
+      var blockNumber = await getBlockNumber();
+      self.blockNumber = blockNumber;
 
       self.blocks = await getRecentBlocks(blockNumber, 10, true);
       //- console.log(self.blocks);
