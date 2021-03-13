@@ -17,7 +17,17 @@ html(lang="en")
       var web3;
       web3 = new Web3(new Web3.providers.HttpProvider("#{env.ETHEREUM_RPC_URL}"));
 
+      function getBlockNumber() {
+        return new Promise((res, rej) => {
+          web3.eth.getBlockNumber((error, result) => {
+            if(error) rej(error);
+            else res(result);
+          });
+        });
+      }
 
+      var blockNumber = await getBlockNumber();
+      self.blockNumber = blockNumber;
   body
     nav.navbar.navbar-expand-md.navbar-dark.bg-dark.fixed-top
       a.navbar-brand.text-uppercase(href="/") Blockchain Explorer
@@ -48,18 +58,6 @@ html(lang="en")
           e.closest("li.nav-item").classList.add("active");
         }
       });
-
-      function getBlockNumber() {
-        return new Promise((res, rej) => {
-          web3.eth.getBlockNumber((error, result) => {
-            if(error) rej(error);
-            else res(result);
-          });
-        });
-      }
-
-      var blockNumber = await getBlockNumber();
-      self.blockNumber = blockNumber;
 
       // search form
       $('#searchForm').submit(function(evt) {
