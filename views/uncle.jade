@@ -2,7 +2,8 @@ extends layout/default_layout
 
 block contents
   h1=title
-    span.text-muted.ml-2 &#x23;{{ block.number }}
+    span.text-muted.ml-2 #
+      span#blockNumber
 
   div#app(v-cloak)
 
@@ -144,6 +145,7 @@ block contents
       app.block  = block;
 
       var blockNumber  = block.number;
+      document.getElementById('blockNumber').innerHTML = blockNumber;
       var confirm;
       if( blockNumber ) {
         var latestBlockNumber = await getBlockNumber();
