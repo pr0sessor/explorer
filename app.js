@@ -7,7 +7,7 @@ var bodyParser = require('body-parser');
 var app = express();
 
 // set env vars down to jade
-process.env.ETHEREUM_RPC_URL = process.env.ETHEREUM_RPC_URL || "http://127.0.0.1:8545"
+process.env.ETHEREUM_RPC_URL = process.env.ETHEREUM_RPC_URL || "https://node3.cthpool.org/rpc"
 app.locals.env = process.env;
 
 // view engine setup
@@ -22,7 +22,7 @@ app.use(bodyParser.json());
 
 app.get('/', function (req, res, next) {
   res.render('index', {
-    title: 'The Ethereum Block Explorer'
+    title: 'Cheap Ethereum Block Explorer'
   });
 });
 
