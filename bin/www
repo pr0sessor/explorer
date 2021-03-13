@@ -16,7 +16,7 @@ const server = http.createServer(app)
 
 server.listen(port)
 server.on('error', onError)
-server.on('listening', onListening)
+server.on('listening', onListening(port))
 
 if (ssl) {
   const sport = normalizePort(process.env.PORT || 443)
@@ -28,7 +28,7 @@ if (ssl) {
 
   server2.listen(sport)
   server2.on('error', onError)
-  server2.on('listening', onListening)
+  server2.on('listening', onListening(sport))
 }
 
 function normalizePort (val) {
@@ -68,10 +68,6 @@ function onError (error) {
   }
 }
 
-function onListening () {
-  const addr = server.address()
-  const bind = typeof addr === 'string'
-    ? 'pipe ' + addr
-    : 'port ' + addr.port
-  debug('Listening on ' + bind)
+function onListening (port) {
+  console.log('Listening on ' + port)
 }
