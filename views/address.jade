@@ -90,14 +90,23 @@ block contents
         });
       });
     }
-
+    
+    function getCTHETH() {
+      return new Promise((res, rej) => {
+        $.getJSON("https://api.centex.io/v1/public/tickers", function(json) {
+          var price = Number(json[7]['last_price']);
+          res(price);
+        });
+      });
+    }
 
     function getETHUSD(balance) {
       return new Promise((res, rej) => {
-        $.getJSON("https://api.coinmarketcap.com/v1/ticker/ethereum/", function(json) {
-          var price = Number(json[0].price_usd);
+        $.getJSON("https://min-api.cryptocompare.com/data/price?fsym=ETH&tsyms=USD", async(json) => {
+          var price = Number(json.USD);
           var ethusd = price.toFixed(2);
-          var balanceusd = "$ " + (ethusd * balance);
+          var ctheth = await getCTHETH();
+          var balanceusd = "$ " + (ethusd * ctheth * balance).toFixed(4);
           res(balanceusd);
         });
       });
