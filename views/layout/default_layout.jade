@@ -50,7 +50,7 @@ html(lang="en")
       });
 
       // search form
-      $('#searchForm').submit(function(evt) {
+      $('#searchForm').submit(async(evt) => {
         evt.preventDefault();
         var search = evt.target.search.value;
         //- console.log(search, ", ", search.length);
@@ -61,9 +61,17 @@ html(lang="en")
         //- var regexpAddr = /^(0x)?[0-9a-f]{40}$/; //New ETH Regular Expression for Addresses
         //- var regexpBlock = /[0-9]{1,7}?/;
         //- var result =regexpTx.test(search);
-
-        if( search.length === 66 ) { //tx hash
-          location.href = '/tx/' + search;
+        
+        
+        if( search.length === 66 ) {
+          const block = await getBlock(search);
+          if (block) {
+              const blockMain = await getBlock(block.number);
+              if (blockMain.hash != block.hash) location.href = '/uncle/' + search;
+              else location.href = '/block/' + blockMain.number;
+          } else {
+              location.href = '/tx/' + search;
+          }
         } else if( search.length === 42 && web3.isAddress(search) ) {
           location.href = '/address/' + search;
         } else if( !isNaN(search) ) {

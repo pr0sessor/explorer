@@ -34,6 +34,14 @@ app.get('/block/:number/', function (req, res, next) {
   });
 });
 
+app.get('/uncle/:hash/', function (req, res, next) {
+  var hash = req.params['hash'];
+  res.render('uncle', {
+    title: 'Uncle Block',
+    hash: hash
+  });
+});
+
 app.get('/tx/:hash/', function (req, res, next) {
   var hash = req.params['hash'];
   res.render('transaction', {
